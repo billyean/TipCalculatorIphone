@@ -1,1 +1,1 @@
-![alt tag](https://github.com/billyean/TipCalculatorIphone/blob/master/WalkThrough.gif)
+![alt tag](./WalkThrough.gif)
