@@ -14,6 +14,7 @@
 		82C31E121E64AB260071C1AD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82C31E101E64AB260071C1AD /* LaunchScreen.storyboard */; };
 		82C31E1D1E64AB260071C1AD /* TipCalculatorIphoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C31E1C1E64AB260071C1AD /* TipCalculatorIphoneTests.swift */; };
 		82C31E281E64AB260071C1AD /* TipCalculatorIphoneUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C31E271E64AB260071C1AD /* TipCalculatorIphoneUITests.swift */; };
+		82C31E361E64BDBA0071C1AD /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C31E351E64BDBA0071C1AD /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		82C31E231E64AB260071C1AD /* TipCalculatorIphoneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipCalculatorIphoneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		82C31E271E64AB260071C1AD /* TipCalculatorIphoneUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipCalculatorIphoneUITests.swift; sourceTree = "<group>"; };
 		82C31E291E64AB260071C1AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		82C31E351E64BDBA0071C1AD /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +102,7 @@
 				82C31E071E64AB260071C1AD /* AppDelegate.swift */,
 				82C31E091E64AB260071C1AD /* ViewController.swift */,
 				82C31E0B1E64AB260071C1AD /* Main.storyboard */,
+				82C31E351E64BDBA0071C1AD /* SettingsViewController.swift */,
 				82C31E0E1E64AB260071C1AD /* Assets.xcassets */,
 				82C31E101E64AB260071C1AD /* LaunchScreen.storyboard */,
 				82C31E131E64AB260071C1AD /* Info.plist */,
@@ -264,6 +267,7 @@
 			files = (
 				82C31E0A1E64AB260071C1AD /* ViewController.swift in Sources */,
 				82C31E081E64AB260071C1AD /* AppDelegate.swift in Sources */,
+				82C31E361E64BDBA0071C1AD /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
