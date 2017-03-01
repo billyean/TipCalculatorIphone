@@ -9,17 +9,24 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var selectedPercentage = 0
-
     @IBOutlet weak var tipLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var amountField: UITextField!
     
     @IBOutlet weak var percentSegment: UISegmentedControl!
+    
+    let defaults = UserDefaults.standard
+    var currencyFormatter = NumberFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         loadDefault()
+        
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = .currency
+        // localize to your grouping and decimal separator
+        currencyFormatter.locale = .current
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,12 +35,13 @@ class ViewController: UIViewController {
     }
 
     @IBAction func amountChanged(_ sender: AnyObject) {
-        let percentages = [0.15, 0.18, 0.20]
+        let percentages = defaults.array(forKey: "percentages")
+        
         let amount = Double(amountField.text!) ?? 0.0
-        let tip = amount * percentages[percentSegment.selectedSegmentIndex]
+        let tip = amount * (percentages?[percentSegment.selectedSegmentIndex] as? Double)! / 100.0
         let total = amount + tip
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+        tipLabel.text = currencyFormatter.string(from: tip as NSNumber)
+        totalLabel.text = currencyFormatter.string(from: total as NSNumber)
     }
 
     @IBAction func tapOnPanel(_ sender: AnyObject) {
@@ -46,10 +54,20 @@ class ViewController: UIViewController {
     }
     
     func loadDefault() {
-        let defaults = UserDefaults.standard
-        selectedPercentage = defaults.integer(forKey: "defaultPercentageIndex")
-        if percentSegment.selectedSegmentIndex != selectedPercentage {
-            percentSegment.selectedSegmentIndex = selectedPercentage
+        var defaultPercentages = defaults.array(forKey: "percentages")
+        if defaultPercentages == nil {
+            defaultPercentages = [15, 18, 20]
+            defaults.set(defaultPercentages, forKey: "percentages")
+        }
+        
+        percentSegment.removeAllSegments()
+        for (i, element) in (defaultPercentages?.enumerated())! {
+            percentSegment.insertSegment(withTitle: String(format: "%d%%", element as! Int), at: i, animated: false)
+        }
+        
+        let selectedPercentageIndex = defaults.integer(forKey: "defaultPercentageIndex")
+        if percentSegment.selectedSegmentIndex != selectedPercentageIndex {
+            percentSegment.selectedSegmentIndex = selectedPercentageIndex
         }
     }
 }

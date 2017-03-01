@@ -18,6 +18,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         // Do any additional setup after loading the view.
         tableView.delegate = self
         tableView.dataSource = self
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addPercentage(sender:)))
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,12 +32,13 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        let percentages = defaults.array(forKey: "percentages")
+        return (percentages?.count)!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let defaults = UserDefaults.standard
-        let percentages = [15, 18, 20]
+        let percentages = defaults.array(forKey: "percentages")
         let defaultPercentIndex = defaults.integer(forKey: "defaultPercentageIndex") 
         let row = indexPath.row
         let cellId = "Tip Percent:"
@@ -44,7 +47,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellId)
-            cell.textLabel?.text = String(format: "%d%%", percentages[row])
+            cell.textLabel?.text = String(format: "%d%%", percentages?[row] as! Int)
             
             if (defaultPercentIndex == row) {
                 cell.accessoryType = .checkmark
@@ -82,4 +85,33 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func addPercentage(sender: UIBarButtonItem) {
+        let alert = UIAlertController(title: "New Percentage", message: "New percentage", preferredStyle: .alert)
+        
+        //2. Add the text field. You can configure it however you need.
+        alert.addTextField { (textField) in
+            textField.placeholder = "Please input a new percentage"
+        }
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+            if let newPercent = Int((textField?.text)!) {
+                let defaults = UserDefaults.standard
+                var percentages = defaults.array(forKey: "percentages")
+                if let contains = percentages?.contains(where: {e in return (e as? Int) == newPercent}) {
+                    if (!contains) {
+                        percentages?.append(newPercent)
+                        defaults.set(percentages, forKey: "percentages")
+                        self.reloadTableView()
+                    }
+                }
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func reloadTableView() {
+        tableView.reloadData()
+    }
 }
