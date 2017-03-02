@@ -13,10 +13,16 @@ class ViewController: UIViewController {
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var amountField: UITextField!
     
+    @IBOutlet weak var amountTitle: UILabel!
     @IBOutlet weak var percentSegment: UISegmentedControl!
     
+    @IBOutlet weak var bottomView: UIView!
+    
+    @IBOutlet weak var initAmount: UITextField!
     let defaults = UserDefaults.standard
     var currencyFormatter = NumberFormatter()
+    
+    var firstTime = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,9 +55,35 @@ class ViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if (firstTime) {
+            let locale = Locale.current
+            let currencySymbol = locale.currencySymbol
+            
+            initAmount.text = currencySymbol
+            totalLabel.text = "(currencySymbol)0.00"
+            tipLabel.text = "(currencySymbol)0.00"
+            
+            amountTitle.center.x -= view.bounds.width
+            amountField.center.x -= view.bounds.width
+            percentSegment.center.x -= view.bounds.width
+            bottomView.center.x -= view.bounds.width
+            firstTime = false
+        }
         loadDefault()
         amountChanged(self)
     }
+    
+    @IBAction func getFocus(_ sender: AnyObject) {
+        UIView.animate(withDuration: 0.4, animations: {
+            // This causes first view to fade in and second view to fade out
+            self.initAmount.center.x -= self.view.bounds.width
+            self.amountTitle.center.x += self.view.bounds.width
+            self.amountField.center.x += self.view.bounds.width
+            self.percentSegment.center.x += self.view.bounds.width
+            self.bottomView.center.x += self.view.bounds.width
+        })
+    }
+    
     
     func loadDefault() {
         var defaultPercentages = defaults.array(forKey: "percentages")
