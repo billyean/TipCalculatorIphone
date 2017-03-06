@@ -9,6 +9,16 @@
 import UIKit
 
 class ViewController: UIViewController {
+    let amount_key = "TipCalculator.amount"
+    
+    let current_time_key = "TipCalculator.saveDate"
+    
+    let percentages_array_key = "TipCalculator.percentages"
+
+    let percentage_index_key = "TipCalculator.defaultPercentageIndex"
+    
+    let ten_minutes: TimeInterval = 60.0 * 10
+    
     @IBOutlet weak var tipLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var amountField: UITextField!
@@ -29,6 +39,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad ()")
         // Do any additional setup after loading the view, typically from a nib.
         loadDefault()
         
@@ -36,7 +47,6 @@ class ViewController: UIViewController {
         currencyFormatter.numberStyle = .currency
         // localize to your grouping and decimal separator
         currencyFormatter.locale = .current
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,7 +56,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func amountChanged(_ sender: AnyObject) {
-        let percentages = defaults.array(forKey: "percentages")
+        let percentages = defaults.array(forKey: percentages_array_key)
         
         let amount = Double(amountField.text!) ?? 0.0
         let tip = amount * (percentages?[percentSegment.selectedSegmentIndex] as? Double)! / 100.0
@@ -58,13 +68,34 @@ class ViewController: UIViewController {
     @IBAction func tapOnPanel(_ sender: AnyObject) {
         view.endEditing(true)
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        if let amount = Double(amountField.text!) {
+            print("save (amount_key): (amount)")
+            defaults.set(amount, forKey: amount_key)
+            defaults.set(Date(), forKey: current_time_key)
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         if (firstTime) {
             let locale = Locale.current
             let currencySymbol = locale.currencySymbol
+            initAmount.text = currencySymbol! 
             
-            initAmount.text = currencySymbol
+            if let saveDate = defaults.object(forKey: current_time_key) {
+                let interval = Date().timeIntervalSince(saveDate as! Date)
+                if  interval <= ten_minutes {
+                    let savedAmt = defaults.double(forKey: amount_key)
+                    var amountText = ""
+                    if savedAmt != 0.0 {
+                        amountText = currencyFormatter.string(from: savedAmt as NSNumber)!
+                    }
+                    initAmount.text = amountText
+                    amountField.text = String(savedAmt)
+                }
+            }
             totalLabel.text = "(currencySymbol)0.00"
             tipLabel.text = "(currencySymbol)0.00"
             
@@ -93,10 +124,10 @@ class ViewController: UIViewController {
     
     
     func loadDefault() {
-        var defaultPercentages = defaults.array(forKey: "percentages")
+        var defaultPercentages = defaults.array(forKey: percentages_array_key)
         if defaultPercentages == nil {
             defaultPercentages = [15, 18, 20]
-            defaults.set(defaultPercentages, forKey: "percentages")
+            defaults.set(defaultPercentages, forKey: percentages_array_key)
         }
         
         percentSegment.removeAllSegments()
@@ -104,7 +135,7 @@ class ViewController: UIViewController {
             percentSegment.insertSegment(withTitle: String(format: "%d%%", element as! Int), at: i, animated: false)
         }
         
-        let selectedPercentageIndex = defaults.integer(forKey: "defaultPercentageIndex")
+        let selectedPercentageIndex = defaults.integer(forKey: percentage_index_key)
         if percentSegment.selectedSegmentIndex != selectedPercentageIndex {
             percentSegment.selectedSegmentIndex = selectedPercentageIndex
         }

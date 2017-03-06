@@ -9,9 +9,13 @@
 import UIKit
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var percentages = UserDefaults.standard.array(forKey: "percentages")
+    let percentages_array_key = "TipCalculator.percentages"
     
-    var defaultPercentIndex = UserDefaults.standard.integer(forKey: "defaultPercentageIndex")
+    let percentage_index_key = "TipCalculator.defaultPercentageIndex"
+    
+    var percentages = UserDefaults.standard.array(forKey: "TipCalculator.percentages")
+    
+    var defaultPercentIndex = UserDefaults.standard.integer(forKey: "TipCalculator.defaultPercentageIndex")
     
     @IBOutlet var tableView: UITableView!
     
@@ -69,7 +73,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         if (row != defaultPercentIndex) {
             let oldRow = IndexPath(row: defaultPercentIndex, section: 0)
             defaultPercentIndex = row
-            UserDefaults.standard.set(row, forKey: "defaultPercentageIndex")
+            UserDefaults.standard.set(row, forKey: "TipCalculator.defaultPercentageIndex")
             tableView.cellForRow(at: oldRow)?.accessoryType = .none
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             tableView.reloadData()
@@ -94,9 +98,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             if ((percentages?.count)! > 3) {
                 percentages?.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
-                UserDefaults.standard.set(percentages, forKey: "percentages")
+                UserDefaults.standard.set(percentages, forKey: "TipCalculator.percentages")
                 if (defaultPercentIndex == indexPath.row) {
-                    UserDefaults.standard.set(0, forKey: "defaultPercentageIndex")
+                    UserDefaults.standard.set(0, forKey: "TipCalculator.defaultPercentageIndex")
                 }
             }
         }
@@ -123,9 +127,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                                 let atIndex = IndexPath(row: index, section: 0)
                                 self.tableView.insertRows(at: [atIndex], with: UITableViewRowAnimation.automatic)
                                 if (index < self.defaultPercentIndex) {
-                                    UserDefaults.standard.set(self.defaultPercentIndex + 1, forKey: "defaultPercentageIndex")
+                                    UserDefaults.standard.set(self.defaultPercentIndex + 1, forKey: "TipCalculator.defaultPercentageIndex")
                                 }
-                                UserDefaults.standard.set(self.percentages, forKey: "percentages")
+                                UserDefaults.standard.set(self.percentages, forKey: "TipCalculator.percentages")
                                 append = false
                                 break
                             }
@@ -135,7 +139,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                             self.percentages?.append(newPercent)
                             let atIndex = IndexPath(row: (self.percentages?.count)! - 1, section: 0)
                             self.tableView.insertRows(at: [atIndex], with: UITableViewRowAnimation.automatic)
-                            UserDefaults.standard.set(self.percentages, forKey: "percentages")
+                            UserDefaults.standard.set(self.percentages, forKey: "TipCalculator.percentages")
                         }
                     }
                 }

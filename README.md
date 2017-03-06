@@ -15,17 +15,17 @@ The following **required** functionality is complete:
 
 The following **optional** features are implemented:
 * [X] UI animations
-* [ ] Remembering the bill amount across app restarts (if <10mins)
+* [X] Remembering the bill amount across app restarts (if <10mins)
 * [X] Using locale-specific currency and currency thousands separators.
 * [X] Making sure the keyboard is always visible and the bill amount is always the first responder. This way the user doesn't have to tap anywhere to use this app. Just launch the app and start typing.
 
 The following **additional** features are implemented:
 
-- [x] List anything else that you can get done to improve the app functionality!
-
+- [X] Customize percentage with table view, able to add, remove new percentages
+- [X] Localized app with Chinese version
 ## Video Walkthrough 
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough of implemented user stories(Walkthrough set restart remember time as 15 seconds):
 
 <img src='./WalkThrough.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
