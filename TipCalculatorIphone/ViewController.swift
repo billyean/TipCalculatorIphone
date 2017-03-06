@@ -87,6 +87,7 @@ class ViewController: UIViewController {
             self.percentSegment.center.x += self.view.bounds.width
             self.bottomView.center.x += self.view.bounds.width
             self.settingBarButton.isEnabled = true
+            self.amountField.inputView?.becomeFirstResponder()
         })
     }
     
