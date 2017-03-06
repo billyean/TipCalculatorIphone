@@ -15,7 +15,6 @@
 		82C31E1D1E64AB260071C1AD /* TipCalculatorIphoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C31E1C1E64AB260071C1AD /* TipCalculatorIphoneTests.swift */; };
 		82C31E281E64AB260071C1AD /* TipCalculatorIphoneUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C31E271E64AB260071C1AD /* TipCalculatorIphoneUITests.swift */; };
 		82C31E361E64BDBA0071C1AD /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C31E351E64BDBA0071C1AD /* SettingsViewController.swift */; };
-		82EDB0211E67F6DD00F83578 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EDB0201E67F6DD00F83578 /* HomeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +49,6 @@
 		82C31E271E64AB260071C1AD /* TipCalculatorIphoneUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipCalculatorIphoneUITests.swift; sourceTree = "<group>"; };
 		82C31E291E64AB260071C1AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82C31E351E64BDBA0071C1AD /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		82EDB0201E67F6DD00F83578 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,7 +106,6 @@
 				82C31E0E1E64AB260071C1AD /* Assets.xcassets */,
 				82C31E101E64AB260071C1AD /* LaunchScreen.storyboard */,
 				82C31E131E64AB260071C1AD /* Info.plist */,
-				82EDB0201E67F6DD00F83578 /* HomeViewController.swift */,
 			);
 			path = TipCalculatorIphone;
 			sourceTree = "<group>";
@@ -271,7 +268,6 @@
 				82C31E0A1E64AB260071C1AD /* ViewController.swift in Sources */,
 				82C31E081E64AB260071C1AD /* AppDelegate.swift in Sources */,
 				82C31E361E64BDBA0071C1AD /* SettingsViewController.swift in Sources */,
-				82EDB0211E67F6DD00F83578 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,11 +19,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var bottomView: UIView!
     
     @IBOutlet weak var initAmount: UITextField!
+
+    
     let defaults = UserDefaults.standard
     var currencyFormatter = NumberFormatter()
     
+    @IBOutlet weak var settingBarButton: UIBarButtonItem!
     var firstTime = true
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -33,9 +36,11 @@ class ViewController: UIViewController {
         currencyFormatter.numberStyle = .currency
         // localize to your grouping and decimal separator
         currencyFormatter.locale = .current
+        
     }
 
     override func didReceiveMemoryWarning() {
+
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
@@ -81,6 +86,7 @@ class ViewController: UIViewController {
             self.amountField.center.x += self.view.bounds.width
             self.percentSegment.center.x += self.view.bounds.width
             self.bottomView.center.x += self.view.bounds.width
+            self.settingBarButton.isEnabled = true
         })
     }
     

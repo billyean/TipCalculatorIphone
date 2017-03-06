@@ -9,7 +9,9 @@
 import UIKit
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var defaults = UserDefaults.standard
+    var percentages = UserDefaults.standard.array(forKey: "percentages")
+    
+    var defaultPercentIndex = UserDefaults.standard.integer(forKey: "defaultPercentageIndex")
     
     @IBOutlet var tableView: UITableView!
     
@@ -20,6 +22,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.dataSource = self
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+", style: .plain, target: self, action: #selector(addPercentage(sender:)))
+        tableView.allowsMultipleSelectionDuringEditing = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,14 +35,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let percentages = defaults.array(forKey: "percentages")
         return (percentages?.count)!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let defaults = UserDefaults.standard
-        let percentages = defaults.array(forKey: "percentages")
-        let defaultPercentIndex = defaults.integer(forKey: "defaultPercentageIndex") 
         let row = indexPath.row
         let cellId = "Tip Percent:"
         
@@ -66,13 +65,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
-        let defaultPercentIndex = defaults.integer(forKey: "defaultPercentageIndex")
         
         if (row != defaultPercentIndex) {
-            defaults.set(row, forKey: "defaultPercentageIndex")
             let oldRow = IndexPath(row: defaultPercentIndex, section: 0)
+            defaultPercentIndex = row
+            UserDefaults.standard.set(row, forKey: "defaultPercentageIndex")
             tableView.cellForRow(at: oldRow)?.accessoryType = .none
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+            tableView.reloadData()
         }
     }
 
@@ -85,6 +85,22 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         // Pass the selected object to the new view controller.
     }
     */
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            if ((percentages?.count)! > 3) {
+                percentages?.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+                UserDefaults.standard.set(percentages, forKey: "percentages")
+                if (defaultPercentIndex == indexPath.row) {
+                    UserDefaults.standard.set(0, forKey: "defaultPercentageIndex")
+                }
+            }
+        }
+    }
     
     func addPercentage(sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "New Percentage", message: "New percentage", preferredStyle: .alert)
@@ -97,21 +113,24 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
             if let newPercent = Int((textField?.text)!) {
-                let defaults = UserDefaults.standard
-                var percentages = defaults.array(forKey: "percentages")
-                if let contains = percentages?.contains(where: {e in return (e as? Int) == newPercent}) {
-                    if (!contains) {
-                        percentages?.append(newPercent)
-                        defaults.set(percentages, forKey: "percentages")
-                        self.reloadTableView()
+                if let contains = self.percentages?.contains(where: {e in return (e as? Int) == newPercent}) {
+                    if (!contains && (self.percentages?.count)! < 5) {
+                        for (index, element) in (self.percentages?.enumerated())! {
+                            if (element as! Int > newPercent) {
+                                self.percentages?.insert(newPercent, at: index)
+                                let atIndex = IndexPath(row: index, section: 0)
+                                self.tableView.insertRows(at: [atIndex], with: UITableViewRowAnimation.automatic)
+                                if (index < self.defaultPercentIndex) {
+                                    UserDefaults.standard.set(self.defaultPercentIndex + 1, forKey: "defaultPercentageIndex")
+                                }
+                                UserDefaults.standard.set(self.percentages, forKey: "percentages")
+                                break
+                            }
+                        }
                     }
                 }
             }
         }))
         self.present(alert, animated: true, completion: nil)
-    }
-    
-    func reloadTableView() {
-        tableView.reloadData()
     }
 }
