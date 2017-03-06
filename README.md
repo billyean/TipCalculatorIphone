@@ -23,6 +23,7 @@ The following **additional** features are implemented:
 
 - [X] Customize percentage with table view, able to add, remove new percentages
 - [X] Localized app with Chinese version
+
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories(Walkthrough set restart remember time as 15 seconds):
