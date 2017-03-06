@@ -59,7 +59,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Default Tip Percentage"
+        return NSLocalizedString("PercentagesSectionHeader", comment: "")
     }
     
     
@@ -103,17 +103,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func addPercentage(sender: UIBarButtonItem) {
-        let alert = UIAlertController(title: "New Percentage", message: "New percentage", preferredStyle: .alert)
+        let alert = UIAlertController(title: NSLocalizedString("NewPercentageTitle", comment: ""),
+                                      message: NSLocalizedString("NewPercentageMessage", comment: ""), preferredStyle: .alert)
         
         //2. Add the text field. You can configure it however you need.
         alert.addTextField { (textField) in
-            textField.placeholder = "Please input a new percentage"
+            textField.placeholder = NSLocalizedString("NewPercentagePlaceHolder", comment: "")
         }
 
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
             if let newPercent = Int((textField?.text)!) {
                 if let contains = self.percentages?.contains(where: {e in return (e as? Int) == newPercent}) {
+                    var append = true
                     if (!contains && (self.percentages?.count)! < 5) {
                         for (index, element) in (self.percentages?.enumerated())! {
                             if (element as! Int > newPercent) {
@@ -124,8 +126,16 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                                     UserDefaults.standard.set(self.defaultPercentIndex + 1, forKey: "defaultPercentageIndex")
                                 }
                                 UserDefaults.standard.set(self.percentages, forKey: "percentages")
+                                append = false
                                 break
                             }
+                        }
+                        
+                        if append {
+                            self.percentages?.append(newPercent)
+                            let atIndex = IndexPath(row: (self.percentages?.count)! - 1, section: 0)
+                            self.tableView.insertRows(at: [atIndex], with: UITableViewRowAnimation.automatic)
+                            UserDefaults.standard.set(self.percentages, forKey: "percentages")
                         }
                     }
                 }
